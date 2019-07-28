@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bender_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.profile.MainActivity"
+        android:orientation="vertical">
+
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+
+        <ru.skillbranch.devintensive.ui.custom.AsperctRatioImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/profile_bg"
+                    android:scaleType="centerCrop"
+                    app:aspectRatio="1.78"/> <!--END 17.58-->
+    </FrameLayout>
+</LinearLayout>

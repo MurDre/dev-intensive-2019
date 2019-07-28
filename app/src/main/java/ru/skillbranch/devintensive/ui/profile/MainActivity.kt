@@ -1,10 +1,11 @@
-package ru.skillbranch.devintensive
+package ru.skillbranch.devintensive.ui.profile
 
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.extensions.hideKeyboard
 import ru.skillbranch.devintensive.models.Bender
 
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity(), TextView.OnEditorActionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_profile)
 
 
         val status = savedInstanceState?.getString(BENDER_STATUS) ?: Bender.Status.NORMAL.name
