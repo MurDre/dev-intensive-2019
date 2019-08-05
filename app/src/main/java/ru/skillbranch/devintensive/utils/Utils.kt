@@ -1,68 +1,80 @@
 package ru.skillbranch.devintensive.utils
 
-object Utils {
-    fun parseFullName(fullName: String?): Pair<String?, String?> {
-        if (!fullName.isNullOrBlank()) {
-            fullName.trim().split(" ").apply {
-                return if (this.size > 1) component1() to component2() else component1() to null
-            }
-        }
-        return null to null
-    }
+import android.content.Context
+import android.util.TypedValue
+import ru.skillbranch.devintensive.R
 
-    fun toInitials(firstName: String?, lastName: String?): String? {
-        return if (!firstName.isNullOrBlank()) {
-            "${firstName.trim()[0].toUpperCase()}" +
-                    if (!lastName.isNullOrBlank()) lastName.trim()[0].toUpperCase().toString() else ""
-        } else if (!lastName.isNullOrBlank()) lastName.trim()[0].toUpperCase().toString() else null
+object Utils {
+
+    fun parseFullName(fullName: String?): Pair<String?, String?> {
+        val parts: List<String>? = fullName?.split(" ")
+
+        val firstName = parts?.getOrNull(0)?.ifEmpty{ null }
+        val lastName = parts?.getOrNull(1)?.ifEmpty{ null }
+
+        return firstName to lastName
     }
 
     fun transliteration(payload: String, divider: String = " "): String {
-        return buildString {
-            payload.trim().split(" ").asSequence().forEach { string ->
-                string.asSequence().forEach { char ->
-                    var res = translit[char.toLowerCase().toString()]
-                    if (char.isUpperCase()) res = res?.capitalize()
-                    this@buildString.append(res ?: char.toString())
-                }
-                this.append(divider)
+        var nickname = ""
+
+        payload.trim().forEach {
+            nickname += when {
+                it == ' ' -> divider
+                dictionary.containsKey(it.toLowerCase()) ->
+                    if(it.isUpperCase()) dictionary[it.toLowerCase()]?.capitalize() else dictionary[it]
+                else -> it
             }
-        }.removeSuffix(divider)
+        }
+        return nickname
     }
 
-    val translit = mapOf(
-        Pair("а", "a"),
-        Pair("б", "b"),
-        Pair("в", "v"),
-        Pair("г", "g"),
-        Pair("д", "d"),
-        Pair("е", "e"),
-        Pair("ё", "e"),
-        Pair("ж", "zh"),
-        Pair("з", "z"),
-        Pair("и", "i"),
-        Pair("й", "i"),
-        Pair("к", "k"),
-        Pair("л", "l"),
-        Pair("м", "m"),
-        Pair("н", "n"),
-        Pair("о", "o"),
-        Pair("п", "p"),
-        Pair("р", "r"),
-        Pair("с", "s"),
-        Pair("т", "t"),
-        Pair("у", "u"),
-        Pair("ф", "f"),
-        Pair("х", "h"),
-        Pair("ц", "c"),
-        Pair("ч", "ch"),
-        Pair("ш", "sh"),
-        Pair("щ", "sh'"),
-        Pair("ъ", ""),
-        Pair("ы", "i"),
-        Pair("ь", ""),
-        Pair("э", "e"),
-        Pair("ю", "yu"),
-        Pair("я", "ya")
+    fun toInitials(firstName: String?, lastName: String?): String? {
+        val firstLetter = firstName?.trim()?.firstOrNull()?.toUpperCase() ?: ""
+        val secondLetter = lastName?.trim()?.firstOrNull()?.toUpperCase() ?: ""
+
+        return "$firstLetter$secondLetter".ifEmpty { null }
+    }
+
+    private val dictionary = mapOf(
+        'а' to "a",
+        'б' to "b",
+        'в' to "v",
+        'г' to "g",
+        'д' to "d",
+        'е' to "e",
+        'ё' to "e",
+        'ж' to "zh",
+        'з' to "z",
+        'и' to "i",
+        'й' to "i",
+        'к' to "k",
+        'л' to "l",
+        'м' to "m",
+        'н' to "n",
+        'о' to "o",
+        'п' to "p",
+        'р' to "r",
+        'с' to "s",
+        'т' to "t",
+        'у' to "u",
+        'ф' to "f",
+        'х' to "h",
+        'ц' to "c",
+        'ч' to "ch",
+        'ш' to "sh",
+        'щ' to "sh'",
+        'ъ' to "",
+        'ы' to "i",
+        'ь' to "",
+        'э' to "e",
+        'ю' to "yu",
+        'я' to "ya"
     )
+
+    fun getThemeAccentColor(context: Context): Int {
+        val value = TypedValue()
+        context.theme.resolveAttribute(R.attr.colorAccent, value, true)
+        return value.data
+    }
 }
